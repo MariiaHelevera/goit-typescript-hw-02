@@ -1,0 +1,40 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 999;
+}
+
+.modalContent {
+    filter: drop-shadow(0 0 10px black);
+}
+
+.modalContent:focus-visible {
+    outline: none;
+}
+
+.modalImage {
+    height: 600px;
+}
+
+.modalInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    padding: 0 12px;
+}
+
+.imageLikesContainer {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    gap: 6px;
+}

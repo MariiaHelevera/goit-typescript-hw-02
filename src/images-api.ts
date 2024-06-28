@@ -15,11 +15,12 @@ export const getImagesByQuery = async (searchQuery: string, currentPage: number)
     },
   });
 
-  const apiResponse: ApiResponse = {
-  results: response.data.results,
-  total: response.data.total,
-  total_pages: response.data.total_pages,
-  };
+  // const apiResponse: ApiResponse = {
+  // results: response.data.results,
+  // total: response.data.total,
+  // total_pages: response.data.total_pages,
+  // };
 
-  return apiResponse;
+  // return apiResponse;
+  return response.data;
 }

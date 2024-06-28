@@ -11,15 +11,17 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Loader from '../Loader/Loader';
 import ImageModal from '../ImageModal/ImageModal';
 
+import { Image, ModalData } from '../../types';
+
 function App() {
-  const [gallery, setGallery] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [page, setPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [totalPages, setTotalPages] = useState(0);
-  const [isOpen, setIsOpen] = useState({
-    isModalOpen: false,
+  const [gallery, setGallery] = useState<Image[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalData, setModalData] = useState<ModalData>({
     bigImg: '',
     imgAltDescription: '',
     imgLikes: 0,
@@ -31,12 +33,12 @@ function App() {
       return;
     }
 
-    async function fetchGallery() {
+    async function fetchGallery(): Promise<void> {
       try {
         setIsLoading(true);
         setIsError(false);
         const data = await getImagesByQuery(searchQuery, page);
-        if (!data.data.results.length) {
+        if (!data.results.length) {
           toast('Sorry, no images found. Try another search.', {
             icon: <BsExclamationLg color="blue" size={22} />,
             style: {
@@ -46,8 +48,8 @@ function App() {
             position: 'top-left',
           });
         }
-        setGallery((prevState) => [...prevState, ...data.data.results]);
-        setTotalPages(data.data.total_pages);
+        setGallery((prevState) => [...prevState, ...data.results]);
+        setTotalPages(data.total_pages);
       } catch (error) {
         setIsError(true);
       } finally {
@@ -59,7 +61,7 @@ function App() {
   }, [page, searchQuery]);
 
 
-  const handleSearch = async (keyword) => {
+  const handleSearch = async (keyword: string) => {
     setSearchQuery(keyword);
     setPage(1);
     setGallery([]);
@@ -77,12 +79,13 @@ function App() {
     });
   }, [gallery]);
 
-  function openModal(info) {
-    setIsOpen(info);
+  function openModal(info: ModalData): void {
+    setIsModalOpen(true);
+    setModalData(info);
   }
 
-  function closeModal() {
-    setIsOpen(false);
+  function closeModal(): void {
+    setIsModalOpen(false);
   }
 
   return (
@@ -95,7 +98,7 @@ function App() {
 
       {isLoading && <Loader />}
       
-      <ImageModal isOpen={isOpen} closeModal={closeModal} />
+      <ImageModal isModalOpen={isModalOpen} modalData={modalData} closeModal={closeModal} />
 
       {gallery.length > 0 && !isLoading && totalPages > page && (
         <LoadMoreBtn onLoadMore={handleLoadMore}/>
